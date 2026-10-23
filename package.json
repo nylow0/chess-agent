@@ -1,0 +1,18 @@
+{
+  "name": "chess-analyst",
+  "private": true,
+  "workspaces": ["packages/shared", "apps/server", "apps/web"],
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "start": "bun run build && bun --cwd apps/server start",
+    "dev:server": "bun --cwd apps/server dev",
+    "dev:web": "bun --cwd apps/web dev",
+    "typecheck": "bun --cwd packages/shared typecheck && bun --cwd apps/server typecheck && bun --cwd apps/web typecheck",
+    "test": "bun test",
+    "test:ui": "PLAYWRIGHT_BROWSERS_PATH=.artifacts/browsers playwright test",
+    "build": "bun --cwd apps/web build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

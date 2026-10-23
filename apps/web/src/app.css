@@ -1,0 +1,431 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree Variable", system-ui, -apple-system, sans-serif;
+
+  /* Surfaces and text. The page is true black; everything but the board and
+     chess meaning is neutral grey. */
+  --color-bg: #000000;
+  --color-surface: #161616;
+  --color-raised: #222222;
+  --color-line: #2e2e2e;
+  --color-text: #f4f4f4;
+  --color-muted: #a0a0a0;
+
+  /* Board: Chess.com green. */
+  --color-board-light: #ebecd0;
+  --color-board-dark: #739552;
+
+  /* Results. */
+  --color-win: #81b64c;
+  --color-loss: #fa412d;
+  --color-draw: #a0a0a0;
+
+  /* Move quality. */
+  --color-cls-best: #81b64c;
+  --color-cls-excellent: #81b64c;
+  --color-cls-good: #95b776;
+  --color-cls-book: #d5a47d;
+  --color-cls-inaccuracy: #f7c631;
+  --color-cls-mistake: #ffa459;
+  --color-cls-blunder: #fa412d;
+
+  --radius-board: 4px;
+  --radius-control: 6px;
+  --radius-panel: 10px;
+}
+
+html {
+  background-color: var(--color-bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100dvh;
+  font-size: 14px;
+}
+
+::selection {
+  background: rgba(244, 244, 244, 0.24);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Monochrome form controls: white thumb and check on a dark track. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 20px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--color-text);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-text);
+}
+
+input[type="checkbox"] {
+  accent-color: #ffffff;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.4s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none;
+  }
+}
+
+/* Review layout. The board is the largest square that fits both the available
+   height and width, computed with container query units instead of JS resize
+   handlers. Mobile (<1024px): one scrolling column; the panel gives up its box
+   (display: contents) so its sections can interleave with the board via
+   `order`. Desktop: a centred three-part row whose height is the viewport. */
+.review {
+  --evalbar-w: 20px;
+  --board-gap: 8px;
+  --bar-h: 40px;
+  --bar-gap: 4px;
+  --board-size: calc(100cqw - var(--evalbar-w) - var(--board-gap));
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0.5rem 1rem 1.5rem;
+}
+
+.review > .panel {
+  display: contents;
+}
+
+/* The board column is a grid at every width: the eval bar sits beside the
+   board on desktop and between the player bars on mobile. */
+.review > .board-col {
+  display: grid;
+  grid-template-columns: var(--evalbar-w) var(--board-size);
+  grid-template-rows: var(--bar-h) var(--board-size) var(--bar-h);
+  column-gap: var(--board-gap);
+  row-gap: var(--bar-gap);
+  align-self: center;
+  width: calc(var(--evalbar-w) + var(--board-gap) + var(--board-size));
+}
+
+.review > .board-col > .evalbar {
+  grid-area: 2 / 1;
+}
+
+.review > .board-col > .player-bar-top {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.review > .board-col > .board-slot {
+  grid-area: 2 / 2;
+  width: var(--board-size);
+  height: var(--board-size);
+}
+
+.review > .board-col > .player-bar-bottom {
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+/* Mobile stacking order: facts, top bar, eval bar + board, bottom bar,
+   controls, then the review sections. */
+.review > .board-col {
+  order: 2;
+}
+
+.review .panel-header {
+  order: 1;
+}
+
+.review .controls {
+  order: 6;
+}
+
+.review .sec-accuracy {
+  order: 7;
+}
+
+.review .sec-played {
+  order: 8;
+}
+
+.review .sec-next {
+  order: 9;
+}
+
+.review .sec-graph {
+  order: 10;
+}
+
+.review .sec-movelist {
+  order: 11;
+}
+
+.review .sec-lines {
+  order: 12;
+}
+
+.review .sec-state {
+  order: 7;
+}
+
+/* The panel's middle zone. On mobile it is transparent to the layout
+   (display: contents) so its sections keep interleaving with the board via
+   `order`; on desktop it is the panel's single scrollable area between the
+   fixed facts on top and the fixed controls at the bottom. */
+/* The feedback zone is transparent to the mobile layout (display: contents)
+   so its sections keep interleaving with the board via `order`. */
+.review .panel-feedback {
+  display: contents;
+}
+
+/* Captured pieces: 18px neutral silhouettes. The piece SVG is a CSS mask
+   over a muted background, so the shape reads without depending on the piece
+   colour (black pieces would vanish on the black page). */
+.cap-piece {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  background-color: var(--color-muted);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+@media (min-width: 1024px) {
+  .review {
+    --evalbar-w: 28px;
+    --board-gap: 12px;
+    --bar-gap: 6px;
+    --panel-w: clamp(380px, calc(100cqw - 540px), 440px);
+    --board-size: min(
+      calc(100cqh - 2 * var(--bar-h) - 2 * var(--bar-gap)),
+      calc(100cqw - var(--evalbar-w) - var(--board-gap) - var(--panel-w) - 24px)
+    );
+    container-type: size;
+    display: grid;
+    grid-template-columns: auto var(--panel-w);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: 24px;
+    justify-content: center;
+    height: 100dvh;
+    padding: 0;
+  }
+
+  /* The panel itself never scrolls: its zones are fixed, the move list is
+     the only scroller, so the controls stay fully visible at every height. */
+  .review > .panel {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    background-color: var(--color-surface);
+  }
+
+  /* Fixed feedback zone: the "Move played" and "Next move" cards can never be
+     scrolled away by the move list. The 46cqh cap with its own scrollbar is
+     only a safety valve for the open Adjust details on a short window; with
+     Adjust closed the card fits without an inner scrollbar (1cqh = 1% of the
+     panel, which fills the .review container). */
+  .review .panel-feedback {
+    display: block;
+    flex: 0 0 auto;
+    max-height: 46cqh;
+    overflow-y: auto;
+  }
+
+  /* The move list is the panel's only scroller during normal stepping. The
+     divider above marks the zone's top edge and the 8px padding keeps rows
+     clear of it; the 16px top fade lets a partially scrolled row dissolve
+     instead of being sliced at the boundary. */
+  .review .sec-movelist {
+    flex: 1 1 0%;
+    min-height: 96px;
+    overflow-y: auto;
+    border-top: 1px solid var(--color-line);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+  }
+
+  /* Open engine lines: the section yields space first (shrink weight 1000
+     against the feedback zone's 0, so the feedback keeps its full size and
+     the lines body scrolls within whatever room is left), capped at 30% of
+     the panel. The section's floor keeps the closed summary visible while
+     the body shrinks to nothing. */
+  .review .sec-lines {
+    flex: 0 1000 auto;
+    min-height: 2.75rem; /* top padding + summary row + bottom padding */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .review .sec-lines details {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  /* The scrollable body is the details content slot: Chrome wraps everything
+     after the summary in an anonymous slot, so the constraint must be styled
+     there (::details-content) to reach it. */
+  .review .sec-lines details::details-content {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 30cqh;
+    overflow-y: auto;
+  }
+
+  .review > .board-col {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  /* Mobile ordering no longer applies once the panel is a real box. */
+  .review .panel-header,
+  .review .controls,
+  .review .sec-accuracy,
+  .review .sec-played,
+  .review .sec-next,
+  .review .sec-graph,
+  .review .sec-movelist,
+  .review .sec-lines,
+  .review .sec-state {
+    order: 0;
+  }
+}
+
+/* Mobile (<1024px): one scrolling column with a consistent 16px rhythm
+   between the review's interleaved sections. Unlayered, so it beats the
+   pt-* utilities in the markup. */
+@media (max-width: 1023.98px) {
+  .review .sec-accuracy,
+  .review .sec-played,
+  .review .sec-next,
+  .review .sec-graph,
+  .review .sec-movelist,
+  .review .sec-lines,
+  .review .sec-state {
+    padding-top: 16px;
+  }
+}
+
+/* Short desktop windows: reclaim vertical space so the feedback cards, move
+   rows and controls all fit. These unlayered rules override the utilities. */
+@media (min-width: 1024px) and (max-height: 800px) {
+  .review .kbd-hint {
+    display: none;
+  }
+
+  .review .acc-block {
+    padding-block: 6px;
+  }
+
+  .review .acc-num {
+    font-size: 22px;
+  }
+
+  .review .acc-label {
+    margin-top: 2px;
+  }
+
+  .review .sec-accuracy,
+  .review .sec-graph,
+  .review .panel-feedback > .sec-played,
+  .review .panel-feedback > .sec-next {
+    padding-top: 8px;
+  }
+
+  /* Two more 4-6px trims so the style-card state fits 720px with margin. */
+  .review [data-summary] {
+    margin-top: 4px;
+  }
+
+  .review .controls {
+    padding-bottom: 8px;
+  }
+}
+
+/* The chessground mount fills the square slot; the mark overlay (move-quality
+   tint and badge) is a sibling so board flips, which rebuild chessground's
+   own DOM, cannot destroy it. */
+.board-slot > .cg-mount {
+  position: absolute;
+  inset: 0;
+}
+
+/* The login board fills its sized wrapper square (see LoginView). */
+.login-square .board-slot {
+  width: 100%;
+  height: 100%;
+}
+
+/* Quality badge over the destination square: about 34% of a square wide,
+   centred on the square's top-right corner. */
+.board-badge {
+  position: absolute;
+  width: 4.25%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}

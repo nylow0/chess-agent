@@ -1,0 +1,149 @@
+/* Chess.com-style green board. The conic gradient tiles the two square
+   colours across the 8x8 grid; the dark colour falls on the main diagonal,
+   which puts a1 on a dark square. */
+cg-board {
+  background-color: var(--color-board-light);
+  background-image: repeating-conic-gradient(
+    var(--color-board-dark) 0% 25%,
+    var(--color-board-light) 0% 50%
+  );
+  background-size: 25% 25%;
+  border-radius: var(--radius-board);
+  overflow: hidden;
+}
+
+/* Chessground snaps the board to a multiple of 8 device pixels, leaving a few
+   pixels of slack that would push the controls past the board's right edge.
+   Fill the wrapper so the board shares its column's right edge exactly. */
+.cg-wrap cg-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Plain last-move squares, used when no engine analysis exists. */
+cg-board square.last-move {
+  background-color: rgba(255, 255, 51, 0.5);
+}
+
+/* Arrows carry their own brush opacity; chessground's 0.6 svg opacity would
+   dilute them further. */
+.cg-wrap .cg-shapes {
+  opacity: 1;
+}
+
+cg-board square.check {
+  background: radial-gradient(
+    circle at center,
+    rgba(250, 65, 45, 0.85) 0%,
+    rgba(250, 65, 45, 0.4) 45%,
+    transparent 75%
+  );
+}
+
+/* Vendored piece set: "alpha" by Eric Bentzen (see public/pieces/README.md),
+   licensed CC-BY-SA; fetched from the lichess repo. */
+.cg-wrap piece.pawn.white {
+  background-image: url("/pieces/alpha/wP.svg");
+}
+.cg-wrap piece.knight.white {
+  background-image: url("/pieces/alpha/wN.svg");
+}
+.cg-wrap piece.bishop.white {
+  background-image: url("/pieces/alpha/wB.svg");
+}
+.cg-wrap piece.rook.white {
+  background-image: url("/pieces/alpha/wR.svg");
+}
+.cg-wrap piece.queen.white {
+  background-image: url("/pieces/alpha/wQ.svg");
+}
+.cg-wrap piece.king.white {
+  background-image: url("/pieces/alpha/wK.svg");
+}
+.cg-wrap piece.pawn.black {
+  background-image: url("/pieces/alpha/bP.svg");
+}
+.cg-wrap piece.knight.black {
+  background-image: url("/pieces/alpha/bN.svg");
+}
+.cg-wrap piece.bishop.black {
+  background-image: url("/pieces/alpha/bB.svg");
+}
+.cg-wrap piece.rook.black {
+  background-image: url("/pieces/alpha/bR.svg");
+}
+.cg-wrap piece.queen.black {
+  background-image: url("/pieces/alpha/bQ.svg");
+}
+.cg-wrap piece.king.black {
+  background-image: url("/pieces/alpha/bK.svg");
+}
+
+/* Coordinates sit inside the board: rank numbers in the top-left corner of
+   the left file's squares, file letters in the bottom-right corner of the
+   bottom rank's squares. Each coord is lettered against the square it sits
+   on, so the text uses the opposite square colour. */
+.cg-wrap coords {
+  z-index: 3;
+  opacity: 1;
+}
+
+.cg-wrap coords coord {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cg-wrap coords.ranks {
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  height: 100%;
+}
+
+.cg-wrap coords.ranks coord {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 5px 0 0 4px;
+  transform: none;
+}
+
+.cg-wrap coords.files {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 12.5%;
+  text-align: right;
+}
+
+/* Chessground's base CSS uppercases the file letters; the UI stays sentence
+   case. */
+.cg-wrap coords.files coord {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 4px 4px 0;
+  text-transform: none;
+}
+
+/* Odd-numbered coords sit on dark squares (a1, a3... and the h-file squares
+   when flipped), so they take the cream colour; even ones take dark green.
+   The .black variants swap because a flip moves every coord to the square
+   of the opposite colour. */
+.cg-wrap coords coord:nth-child(odd) {
+  color: var(--color-board-light);
+}
+
+.cg-wrap coords coord:nth-child(even) {
+  color: var(--color-board-dark);
+}
+
+.cg-wrap coords.black coord:nth-child(odd) {
+  color: var(--color-board-dark);
+}
+
+.cg-wrap coords.black coord:nth-child(even) {
+  color: var(--color-board-light);
+}

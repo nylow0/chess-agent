@@ -1,0 +1,6 @@
+node_modules/
+data/
+engine/*.exe
+apps/web/dist/
+.artifacts/
+*.log
