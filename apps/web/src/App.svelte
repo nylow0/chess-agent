@@ -25,7 +25,7 @@
           : route.name === "game"
             ? "Review"
             : "Games";
-    document.title = `${screen} · Post-mortem`;
+    document.title = `${screen} · Chess Agent`;
   });
 </script>
 

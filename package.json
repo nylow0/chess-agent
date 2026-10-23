@@ -1,5 +1,5 @@
 {
-  "name": "chess-analyst",
+  "name": "chess-agent",
   "private": true,
   "workspaces": ["packages/shared", "apps/server", "apps/web"],
   "scripts": {

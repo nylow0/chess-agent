@@ -1,5 +1,5 @@
 {
-  "name": "chess-analyst-server",
+  "name": "chess-agent-server",
   "private": true,
   "type": "module",
   "scripts": {

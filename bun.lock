@@ -3,13 +3,13 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "chess-analyst",
+      "name": "chess-agent",
       "devDependencies": {
         "@playwright/test": "^1.63.0",
       },
     },
     "apps/server": {
-      "name": "chess-analyst-server",
+      "name": "chess-agent-server",
       "dependencies": {
         "@chess/shared": "workspace:*",
         "chess.js": "^1.0.0",
@@ -21,7 +21,7 @@
       },
     },
     "apps/web": {
-      "name": "chess-analyst-web",
+      "name": "chess-agent-web",
       "dependencies": {
         "@fontsource-variable/figtree": "^5.3.0",
         "chess.js": "^1.0.0",
@@ -218,9 +218,9 @@
 
     "bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
 
-    "chess-analyst-server": ["chess-analyst-server@workspace:apps/server"],
+    "chess-agent-server": ["chess-agent-server@workspace:apps/server"],
 
-    "chess-analyst-web": ["chess-analyst-web@workspace:apps/web"],
+    "chess-agent-web": ["chess-agent-web@workspace:apps/web"],
 
     "chess.js": ["chess.js@1.4.0", "", {}, "sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw=="],
 

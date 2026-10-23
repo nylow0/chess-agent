@@ -102,21 +102,21 @@ test("each screen has its own page title", async ({ page, request }) => {
   await seedSync(page);
 
   await page.goto("/");
-  await expect.poll(() => page.title()).toBe("Sign in · Post-mortem");
+  await expect.poll(() => page.title()).toBe("Sign in · Chess Agent");
 
   await page.getByRole("textbox", { name: "Chess.com username" }).fill(player);
   await page.getByRole("button", { name: "Open my games" }).click();
   await expect(page.getByRole("heading", { name: "Games", exact: true })).toBeVisible();
-  await expect.poll(() => page.title()).toBe("Games · Post-mortem");
+  await expect.poll(() => page.title()).toBe("Games · Chess Agent");
 
   await page.getByRole("link", { name: "Style", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Your style", exact: true })).toBeVisible();
-  await expect.poll(() => page.title()).toBe("Style · Post-mortem");
+  await expect.poll(() => page.title()).toBe("Style · Chess Agent");
 
   const games = (await (await request.get(`/api/games?username=${player}`)).json()) as GameSummary[];
   const game = games.find((candidate) => candidate.analyzed)!;
   await page.goto(`/#/game/${game.uuid}`);
-  await expect.poll(() => page.title()).toBe("Review · Post-mortem");
+  await expect.poll(() => page.title()).toBe("Review · Chess Agent");
 });
 
 test("no horizontal page scroll at 360px on games, style and review", async ({ page, request }) => {

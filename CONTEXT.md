@@ -1,6 +1,6 @@
-# Post-mortem
+# Chess Agent
 
-Post-mortem reviews recorded chess games and learns a player's preferences among near-equal moves.
+Chess Agent reviews recorded chess games and learns a player's preferences among near-equal moves.
 
 ## Language
 

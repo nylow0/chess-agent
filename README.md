@@ -1,6 +1,6 @@
-# Post-mortem
+# Chess Agent
 
-Post-mortem is a local tool for reviewing your own Chess.com games. It imports your games, analyzes them with the Reckless engine, and shows where each game was decided. It also learns which of several near-equal moves you tend to choose. It is for review only, and it does not provide a bot or help during live games. The package is named chess-analyst.
+Chess Agent is a local tool for reviewing your own Chess.com games. It imports your games, analyzes them with the Reckless engine, and shows where each game was decided. It also learns which of several near-equal moves you tend to choose. It is for review only, and it does not provide a bot or help during live games.
 
 ## Requirements
 

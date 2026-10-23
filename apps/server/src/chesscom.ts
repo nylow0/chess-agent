@@ -2,7 +2,7 @@ import type { GameResult, SyncResult } from "@chess/shared";
 import { Chess } from "chess.js";
 import { db } from "./db";
 
-const USER_AGENT = "chess-analyst-local/0.1 (local study tool)";
+const USER_AGENT = "chess-agent-local/0.1 (local study tool)";
 const MAX_MONTHS = 6;
 
 export class NotFoundError extends Error {}

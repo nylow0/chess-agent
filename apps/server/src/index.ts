@@ -14,7 +14,7 @@ resetRunningAnalyses();
 migrateSummaries();
 pump();
 
-console.log(`Post-mortem is running at http://localhost:${port}`);
+console.log(`Chess Agent is running at http://localhost:${port}`);
 console.log(`Analysis workers: ${workerCount}`);
 
 process.on("uncaughtException", (err) => {

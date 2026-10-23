@@ -1,5 +1,5 @@
 {
-  "name": "chess-analyst-web",
+  "name": "chess-agent-web",
   "private": true,
   "type": "module",
   "scripts": {
