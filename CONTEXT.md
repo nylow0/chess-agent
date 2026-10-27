@@ -1,6 +1,6 @@
 # Chess Agent
 
-Chess Agent reviews recorded chess games and learns a player's preferences among near-equal moves.
+Chess Agent reviews recorded chess games and learns a player's preferences among near-equal moves. Its goal is the **agent** below, which is not built yet; see "Goal" in `README.md`.
 
 ## Language
 
@@ -17,3 +17,6 @@ A player's recorded move choice at a particular point in a game, together with c
 **Style profile**:
 A learned account of a player's preferences among near-equal moves, together with evidence for how well those preferences predict choices.
 _Avoid_: Player stats
+
+**Agent**:
+A language model that studies a player's games and adapts move recommendations to that player, asking Reckless for every evaluation instead of judging positions itself. Not built yet.

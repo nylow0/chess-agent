@@ -2,6 +2,12 @@
 
 Chess Agent is a local tool for reviewing your own Chess.com games. It imports your games, analyzes them with the Reckless engine, and shows where each game was decided. It also learns which of several near-equal moves you tend to choose. It is for review only, and it does not provide a bot or help during live games.
 
+## Goal
+
+The point of this project is a chess agent that works with Reckless. The agent studies a player's Chess.com games and rating, then adjusts which moves it recommends to fit that player: a 900-rated player and a 2000-rated player can see different best moves in the same position. It keeps learning as new games come in and decides which ones are worth taking notes from. An early game teaches it a lot, the thousandth one very little. The model reasons and explains, and Reckless does every calculation. It will be called through an API, so it has to stay cheap and fast.
+
+What exists today is the foundation: game import, engine analysis, and the style profile. The agent itself is not built yet.
+
 ## Requirements
 
 - Bun 1.3 or newer.
